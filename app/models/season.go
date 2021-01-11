@@ -1,12 +1,12 @@
 package models
 
-import "gorm.io/gorm"
+import "github.com/jinzhu/gorm"
 
-// Category struct
-type Category struct {
+// Season struct
+type Season struct {
 	gorm.Model
+	CatalogueID uint   `json:"catalogue_id" gorm:"foreignkey:ID"`
 	Title       string `json:"title" gorm:"unique;not null"`
 	Slug        string `json:"slug" gorm:"unique;not null"`
 	Description string `json:"description" gorm:"not null"`
-	Status      int    `json:"status" sql:"DEFAULT:1"`
 }

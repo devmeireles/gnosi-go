@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/devmeireles/gnosi-api/app/controller"
+	"github.com/devmeireles/gnosi-api/app/middlewares"
 
 	"github.com/gorilla/mux"
 )
@@ -17,31 +18,33 @@ func (server *Server) SetupRoutes() *mux.Router {
 	// Auth Routes
 	auth := r.PathPrefix("/auth").Subrouter()
 	auth.HandleFunc("/login", controller.Login).Methods("POST")
-	// auth.HandleFunc("/register", controller.CreateUser).Methods("POST")
-
-	// Swagger Routes
-	// r.PathPrefix("/swagger").Handler(httpSwagger.WrapHandler)
+	auth.HandleFunc("/register", controller.CreateUser).Methods("POST")
 
 	api := r.PathPrefix("/api").Subrouter()
-	// api.Use(middlewares.AuthJwtVerify)
+	api.Use(middlewares.AuthJwtVerify)
 
 	// Categories routes
-	api.HandleFunc("/category", controller.GetAllCategories).Methods("GET")
+	api.HandleFunc("/category", controller.GetCategories).Methods("GET")
+	api.HandleFunc("/category/{id:[0-9]+}", controller.GetCategory).Methods("GET")
+	api.HandleFunc("/category", controller.CreateCategory).Methods("POST")
+	api.HandleFunc("/category/{id:[0-9]+}", controller.UpdateCategory).Methods("PUT")
+	api.HandleFunc("/category/{id:[0-9]+}", controller.DeleteCategory).Methods("DELETE")
 
-	// Skill routes
-	// api.HandleFunc("/skills", controller.GetAllSkills).Methods("GET")
-	// api.HandleFunc("/skill/{id:[0-9]+}", controller.GetSkill).Methods("GET")
-	// api.HandleFunc("/skill", controller.CreateSkill).Methods("POST")
-	// api.HandleFunc("/skill/{id:[0-9]+}", controller.UpdateSkill).Methods("PUT")
-	// api.HandleFunc("/skill/{id:[0-9]+}", controller.DeleteSkill).Methods("DELETE")
+	// Catalogues routes
+	api.HandleFunc("/catalogue", controller.GetCatalogues).Methods("GET")
+	api.HandleFunc("/catalogue/{id:[0-9]+}", controller.GetCatalogue).Methods("GET")
+	api.HandleFunc("/catalogue", controller.CreateCatalogue).Methods("POST")
+	api.HandleFunc("/catalogue/{id:[0-9]+}", controller.UpdateCatalogue).Methods("PUT")
+	api.HandleFunc("/catalogue/{id:[0-9]+}", controller.DeleteCatalogue).Methods("DELETE")
 
-	// User routes
-	// api.HandleFunc("/user/address", controller.CreateUserAddress).Methods("POST")
-	// api.HandleFunc("/user/address", controller.UpdateUserAddress).Methods("PUT")
-	// api.HandleFunc("/users", controller.GetAllUsers).Methods("GET")
-	// api.HandleFunc("/user/{id:[0-9]+}", controller.GetUser).Methods("GET")
-	// api.HandleFunc("/user/{id:[0-9]+}", controller.UpdateUser).Methods("PUT")
-	// api.HandleFunc("/user/{id:[0-9]+}", controller.DeleteUser).Methods("DELETE")
+	// Seasons routes
+	api.HandleFunc("/season", controller.GetSeasons).Methods("GET")
+	api.HandleFunc("/season/{id:[0-9]+}", controller.GetSeason).Methods("GET")
+	api.HandleFunc("/season", controller.CreateSeason).Methods("POST")
+	api.HandleFunc("/season/{id:[0-9]+}", controller.UpdateSeason).Methods("PUT")
+	api.HandleFunc("/season/{id:[0-9]+}", controller.DeleteSeason).Methods("DELETE")
+
+	// api.HandleFunc("/catalogue", controller.GetAllCatalogues).Methods("GET")
 
 	server.Router = r
 

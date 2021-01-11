@@ -13,19 +13,6 @@ import (
 
 var server = routes.Server{}
 
-// @title Gnosi API
-// @version 1.0
-// @description This is the Gnosi API
-// @termsOfService http://swagger.io/terms/
-// @contact.name API Support
-// @contact.email dev.meireles@gmail.com
-// @license.name Apache 2.0
-// @license.url http://www.apache.org/licenses/LICENSE-2.0.html
-// @host localhost:3333
-// @BasePath /
-// @securityDefinitions.apikey ApiKeyAuth
-// @in header
-// @name Authorization
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -57,9 +44,9 @@ func main() {
 		log.Fatal("$DB_HOST_DEV must be set")
 	}
 
-	dbName := os.Getenv("DEV_DB_NAME")
+	dbName := os.Getenv("DB_NAME_DEV")
 	if dbName == "" {
-		log.Fatal("$DEV_DB_NAME must be set")
+		log.Fatal("$DB_NAME_DEV must be set")
 	}
 
 	utils.InitDatabase(
@@ -79,7 +66,7 @@ func main() {
 		port = "3333"
 	}
 
-	fmt.Println(port)
+	fmt.Println("Running at", port)
 
 	log.Fatal(http.ListenAndServe(":"+port, r))
 }

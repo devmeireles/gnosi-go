@@ -2,35 +2,55 @@ package utils
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/devmeireles/gnosi-api/app/models"
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/postgres"
+	"gorm.io/driver/sqlite"
+	"gorm.io/gorm"
 )
 
-var db *gorm.DB
+var (
+	DB  *gorm.DB
+	err error
+)
 
+// Database struct
+type Database struct {
+	*gorm.DB
+}
+
+// InitDatabase inits de database
 func InitDatabase(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName string) {
-	var err error
+	var db = DB
 
-	DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", DbHost, DbPort, DbUser, DbName, DbPassword)
+	// DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", DbHost, DbPort, DbUser, DbName, DbPassword)
+	// db, err := gorm.Open(postgres.Open(DBURL), &gorm.Config{})
 
-	db, err = gorm.Open(Dbdriver, DBURL)
+	db, err = gorm.Open(sqlite.Open("./database/gorm.db"), &gorm.Config{})
 	if err != nil {
-		log.Fatal("This is the error:", err)
+		fmt.Println("db err: ", err)
 	}
 
-	db.AutoMigrate(
-		models.Skill{},
-		models.User{},
-		models.Address{},
-	)
+	if err != nil {
+		fmt.Println("db err: ", err)
+	}
 
-	db.Model(models.Address{}).AddForeignKey("user_id", "users(id)", "CASCADE", "CASCADE")
+	DB = db
+
+	migration()
+
+	// db.Preload("Episodes").Find()
+	// db.Preload("Seasons").Preload("Episodes").Find(&models.Catalogue{})
 
 }
 
+func migration() {
+	DB.AutoMigrate(&models.User{})
+	DB.AutoMigrate(&models.Category{})
+	DB.AutoMigrate(&models.Catalogue{})
+	DB.AutoMigrate(&models.Season{})
+	// DB.AutoMigrate(&models.Episode{})
+}
+
 func DBConn() *gorm.DB {
-	return db
+	return DB
 }

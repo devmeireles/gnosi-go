@@ -64,3 +64,22 @@ func ResSuc(res http.ResponseWriter, data interface{}) {
 	res.Write(json)
 	return
 }
+
+func ResValidation(res http.ResponseWriter, validationErr map[string]interface{}) {
+	res.Header().Set("Content-Type", "application/json")
+	res.WriteHeader(http.StatusUnprocessableEntity)
+
+	response := models.ResponseMsg{
+		Success: false,
+		Data:    validationErr,
+	}
+
+	json, err := json.Marshal(response)
+	if err != nil {
+		http.Error(res, err.Error(), http.StatusUnprocessableEntity)
+		return
+	}
+
+	res.Write(json)
+	return
+}
