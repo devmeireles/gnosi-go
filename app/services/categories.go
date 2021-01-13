@@ -69,7 +69,7 @@ func DeleteCategory(id int) (*models.Category, error) {
 	var category models.Category
 	var db = utils.DBConn()
 
-	err = db.Find(&category, id).Error
+	err = db.First(&category, id).Error
 
 	if err != nil {
 		return nil, err
