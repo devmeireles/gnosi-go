@@ -2,7 +2,6 @@ package routes
 
 import (
 	"github.com/devmeireles/gnosi-api/app/controller"
-	"github.com/devmeireles/gnosi-api/app/middlewares"
 
 	"github.com/gorilla/mux"
 )
@@ -21,7 +20,7 @@ func (server *Server) SetupRoutes() *mux.Router {
 	auth.HandleFunc("/register", controller.CreateUser).Methods("POST")
 
 	api := r.PathPrefix("/api").Subrouter()
-	api.Use(middlewares.AuthJwtVerify)
+	// api.Use(middlewares.AuthJwtVerify)
 
 	// Categories routes
 	api.HandleFunc("/category", controller.GetCategories).Methods("GET")

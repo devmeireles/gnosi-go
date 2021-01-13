@@ -13,7 +13,7 @@ func AllCatalogues() (*[]models.Catalogue, error) {
 	var db = utils.DBConn()
 
 	catalogues := []models.Catalogue{}
-	err = db.Model(&models.Catalogue{}).Find(&catalogues).Error
+	err = db.Preload("Seasons").Model(&models.Catalogue{}).Find(&catalogues).Error
 
 	if err != nil {
 		fmt.Println(err)

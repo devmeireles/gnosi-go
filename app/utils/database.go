@@ -40,6 +40,9 @@ func InitDatabase(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName string) {
 
 	// db.Preload("Episodes").Find()
 	// db.Preload("Seasons").Preload("Episodes").Find(&models.Catalogue{})
+	// db.Preload("Seasons").Find(&models.Catalogue{})
+
+	// db.Preload("Seasons").Find(&[]models.Catalogue{})
 
 }
 

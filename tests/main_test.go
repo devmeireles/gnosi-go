@@ -14,9 +14,6 @@ import (
 var server = routes.Server{}
 
 func TestMain(m *testing.M) {
-	// utils.LoadEnv()
-
-	// err := godotenv.Load(os.ExpandEnv("$GOPATH/src/github.com/adamcohen/godotenv-test/.env"))
 	err := godotenv.Load(os.ExpandEnv("../.env"))
 	if err != nil {
 		fmt.Println(err)

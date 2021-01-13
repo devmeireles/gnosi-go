@@ -84,10 +84,24 @@ func UpdateCategory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	_, err = categoryService.GetCategory(id)
+	if err != nil {
+		utils.ResErr(w, err, http.StatusNotFound)
+		return
+	}
+
 	category := models.Category{}
 	err = json.Unmarshal(body, &category)
 
 	category.Slug = utils.Slugfy(category.Title)
+
+	validation := validations.ValidateCategory(&category)
+
+	if validation != nil {
+		utils.ResValidation(w, validation)
+		return
+	}
+
 	updatedCategory, err := categoryService.UpdateCategory(&category, id)
 
 	if err != nil {

@@ -1,6 +1,7 @@
 package tests
 
 import (
+	"bytes"
 	"encoding/json"
 	"io/ioutil"
 	"net/http"
@@ -28,12 +29,119 @@ func parseBody(content *httptest.ResponseRecorder) models.ResponseMsg {
 }
 
 func TestGetCategories(t *testing.T) {
-	t.Run("Get all categories", func(t *testing.T) {
+	t.Run("It should create a category", func(t *testing.T) {
+		var skill = models.Category{
+			Title:       "Redis",
+			Description: "A short desc",
+		}
+
+		categorySave, _ := json.Marshal(skill)
+
+		req, _ := http.NewRequest("POST", "/api/category", bytes.NewBuffer(categorySave))
+
+		response := executeRequest(req)
+		parsedBody := parseBody(response)
+
+		assert.True(t, parsedBody.Success)
+		assert.Equal(t, http.StatusOK, response.Code)
+	})
+
+	t.Run("It should return all categories", func(t *testing.T) {
 		req, _ := http.NewRequest("GET", "/api/category", nil)
 		response := executeRequest(req)
 		parsedBody := parseBody(response)
 
 		assert.True(t, parsedBody.Success)
 		assert.Equal(t, http.StatusOK, response.Code)
+	})
+
+	t.Run("It should return a category", func(t *testing.T) {
+		req, _ := http.NewRequest("GET", "/api/category/1", nil)
+		response := executeRequest(req)
+		parsedBody := parseBody(response)
+
+		assert.True(t, parsedBody.Success)
+		assert.Equal(t, http.StatusOK, response.Code)
+	})
+
+	t.Run("It shouldn't return a nonexistent category", func(t *testing.T) {
+		req, _ := http.NewRequest("GET", "/api/category/1190347", nil)
+		response := executeRequest(req)
+		parsedBody := parseBody(response)
+
+		assert.False(t, parsedBody.Success)
+		assert.Equal(t, http.StatusNotFound, response.Code)
+	})
+
+	t.Run("It shouldn't return an unparseable category", func(t *testing.T) {
+		req, _ := http.NewRequest("GET", "/api/category/1190347x", nil)
+		response := executeRequest(req)
+
+		assert.Equal(t, http.StatusNotFound, response.Code)
+	})
+
+	t.Run("It shouldn't create a category because this category already exists", func(t *testing.T) {
+		var skill = models.Category{
+			Title:       "Redis",
+			Description: "A short desc",
+		}
+
+		categorySave, _ := json.Marshal(skill)
+
+		req, _ := http.NewRequest("POST", "/api/category", bytes.NewBuffer(categorySave))
+
+		response := executeRequest(req)
+		parsedBody := parseBody(response)
+
+		assert.False(t, parsedBody.Success)
+		assert.Equal(t, http.StatusInternalServerError, response.Code)
+	})
+
+	t.Run("It should update a category", func(t *testing.T) {
+		var skill = models.Category{
+			Title:       "MySQL",
+			Description: "A short desc for mysql",
+		}
+
+		categorySave, _ := json.Marshal(skill)
+
+		req, _ := http.NewRequest("PUT", "/api/category/1", bytes.NewBuffer(categorySave))
+
+		response := executeRequest(req)
+		parsedBody := parseBody(response)
+
+		assert.True(t, parsedBody.Success)
+		assert.Equal(t, http.StatusOK, response.Code)
+	})
+
+	t.Run("It shouldn't update a category because this category doesn't exists", func(t *testing.T) {
+		var skill = models.Category{
+			Title:       "MySQL",
+			Description: "A short desc for mysql",
+		}
+
+		categorySave, _ := json.Marshal(skill)
+
+		req, _ := http.NewRequest("PUT", "/api/category/1983204", bytes.NewBuffer(categorySave))
+
+		response := executeRequest(req)
+		parsedBody := parseBody(response)
+
+		assert.False(t, parsedBody.Success)
+		assert.Equal(t, http.StatusNotFound, response.Code)
+	})
+
+	t.Run("It shouldn't update a category because the body is missing", func(t *testing.T) {
+		var skill = models.Category{}
+
+		categorySave, _ := json.Marshal(skill)
+
+		req, _ := http.NewRequest("PUT", "/api/category/1", bytes.NewBuffer(categorySave))
+
+		response := executeRequest(req)
+		parsedBody := parseBody(response)
+
+		assert.False(t, parsedBody.Success)
+		assert.Equal(t, http.StatusUnprocessableEntity, response.Code)
 	})
 }

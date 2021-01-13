@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/golang/gddo v0.0.0-20201222204913-17b648fae295
 	github.com/gorilla/mux v1.8.0
 	github.com/jinzhu/gorm v1.9.16
 	github.com/joho/godotenv v1.3.0

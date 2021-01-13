@@ -9,6 +9,7 @@ import (
 	"github.com/devmeireles/gnosi-api/app/models"
 	catalogueService "github.com/devmeireles/gnosi-api/app/services"
 	"github.com/devmeireles/gnosi-api/app/utils"
+	"github.com/devmeireles/gnosi-api/app/utils/validations"
 	"github.com/gorilla/mux"
 )
 
@@ -50,6 +51,13 @@ func CreateCatalogue(w http.ResponseWriter, r *http.Request) {
 	err = json.Unmarshal(body, &catalogue)
 	if err != nil {
 		utils.ResErr(w, err, http.StatusInternalServerError)
+		return
+	}
+
+	validation := validations.ValidateCatalogue(&catalogue)
+
+	if validation != nil {
+		utils.ResValidation(w, validation)
 		return
 	}
 
