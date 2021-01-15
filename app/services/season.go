@@ -17,7 +17,7 @@ func AllSeasons() (*[]models.Season, error) {
 
 	if err != nil {
 		fmt.Println(err)
-		return &[]models.Season{}, err
+		return nil, err
 	}
 
 	return &seasons, nil
@@ -29,10 +29,10 @@ func GetSeason(id int) (*models.Season, error) {
 	var err error
 	var db = utils.DBConn()
 
-	err = db.Find(&season, id).Error
+	err = db.First(&season, id).Error
 
 	if err != nil {
-		return &models.Season{}, err
+		return nil, err
 	}
 
 	return &season, nil
@@ -43,7 +43,7 @@ func SaveSeason(season *models.Season) (*models.Season, error) {
 	var db = utils.DBConn()
 
 	if err := db.Model(&models.Season{}).Create(&season).Error; err != nil {
-		return &models.Season{}, err
+		return nil, err
 	}
 
 	return season, nil
@@ -53,8 +53,11 @@ func SaveSeason(season *models.Season) (*models.Season, error) {
 func UpdateSeason(season *models.Season, id int) (*models.Season, error) {
 	var db = utils.DBConn()
 
-	if err := db.Model(&models.Season{}).Where("id = ?", id).Updates(&season).Error; err != nil {
-		return &models.Season{}, err
+	err := db.Model(&models.Season{}).Where("id = ?", id).Updates(&season).Error
+
+	if err != nil {
+		fmt.Println(err)
+		return nil, err
 	}
 
 	return season, nil
@@ -66,7 +69,7 @@ func DeleteSeason(id int) (*models.Season, error) {
 	var season models.Season
 	var db = utils.DBConn()
 
-	err = db.Find(&season, id).Error
+	err = db.First(&season, id).Error
 
 	if err != nil {
 		return &models.Season{}, err

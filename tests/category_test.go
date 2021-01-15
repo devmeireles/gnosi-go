@@ -4,10 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"net/http/httptest"
-	"os"
 	"testing"
 
 	"github.com/devmeireles/gnosi-api/app/models"
@@ -164,10 +162,4 @@ func TestGetCategories(t *testing.T) {
 		assert.True(t, parsedBody.Success)
 		assert.Equal(t, http.StatusOK, response.Code)
 	})
-
-	e := os.Remove("database/gorm.db")
-	if e != nil {
-		log.Fatal(e)
-
-	}
 }

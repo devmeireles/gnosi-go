@@ -9,6 +9,7 @@ import (
 	"github.com/devmeireles/gnosi-api/app/models"
 	seasonService "github.com/devmeireles/gnosi-api/app/services"
 	"github.com/devmeireles/gnosi-api/app/utils"
+	"github.com/devmeireles/gnosi-api/app/utils/validations"
 	"github.com/gorilla/mux"
 )
 
@@ -54,13 +55,20 @@ func CreateSeason(w http.ResponseWriter, r *http.Request) {
 	}
 
 	season.Slug = utils.Slugfy(season.Title)
-	newCategory, err := seasonService.SaveSeason(&season)
+
+	validation := validations.ValidateSeason(&season)
+	if validation != nil {
+		utils.ResValidation(w, validation)
+		return
+	}
+
+	newSeason, err := seasonService.SaveSeason(&season)
 
 	if err != nil {
 		utils.ResErr(w, err, http.StatusInternalServerError)
 		return
 	}
-	utils.ResSuc(w, newCategory)
+	utils.ResSuc(w, newSeason)
 }
 
 // UpdateSeason updates an item
@@ -74,18 +82,31 @@ func UpdateSeason(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	_, err = seasonService.GetSeason(id)
+	if err != nil {
+		utils.ResErr(w, err, http.StatusNotFound)
+		return
+	}
+
 	season := models.Season{}
 	err = json.Unmarshal(body, &season)
 
 	season.Slug = utils.Slugfy(season.Title)
-	updatedCategory, err := seasonService.UpdateSeason(&season, id)
+
+	validation := validations.ValidateSeason(&season)
+	if validation != nil {
+		utils.ResValidation(w, validation)
+		return
+	}
+
+	updatedSeason, err := seasonService.UpdateSeason(&season, id)
 
 	if err != nil {
 		utils.ResErr(w, err, http.StatusInternalServerError)
 		return
 	}
 
-	utils.ResSuc(w, updatedCategory)
+	utils.ResSuc(w, updatedSeason)
 }
 
 // DeleteSeason removes an item
