@@ -43,6 +43,13 @@ func (server *Server) SetupRoutes() *mux.Router {
 	api.HandleFunc("/season/{id:[0-9]+}", controller.UpdateSeason).Methods("PUT")
 	api.HandleFunc("/season/{id:[0-9]+}", controller.DeleteSeason).Methods("DELETE")
 
+	// Episodes routes
+	api.HandleFunc("/episode", controller.GetEpisodes).Methods("GET")
+	api.HandleFunc("/episode/{id:[0-9]+}", controller.GetEpisode).Methods("GET")
+	api.HandleFunc("/episode", controller.CreateEpisode).Methods("POST")
+	api.HandleFunc("/episode/{id:[0-9]+}", controller.UpdateEpisode).Methods("PUT")
+	api.HandleFunc("/episode/{id:[0-9]+}", controller.DeleteEpisode).Methods("DELETE")
+
 	// api.HandleFunc("/catalogue", controller.GetAllCatalogues).Methods("GET")
 
 	server.Router = r

@@ -54,7 +54,7 @@ func migration() {
 	DB.AutoMigrate(&models.Category{})
 	DB.AutoMigrate(&models.Catalogue{})
 	DB.AutoMigrate(&models.Season{})
-	// DB.AutoMigrate(&models.Episode{})
+	DB.AutoMigrate(&models.Episode{})
 }
 
 func DBConn() *gorm.DB {

@@ -10,17 +10,17 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetSeasons(t *testing.T) {
-	t.Run("It should create a season", func(t *testing.T) {
-		var season = models.Season{
-			CatalogueID: 1,
+func TestGetEpisodes(t *testing.T) {
+	t.Run("It should create a episode", func(t *testing.T) {
+		var episode = models.Episode{
+			SeasonID:    1,
 			Title:       "Redis",
 			Description: "A short desc",
 		}
 
-		seasonSave, _ := json.Marshal(season)
+		episodeSave, _ := json.Marshal(episode)
 
-		req, _ := http.NewRequest("POST", "/api/season", bytes.NewBuffer(seasonSave))
+		req, _ := http.NewRequest("POST", "/api/episode", bytes.NewBuffer(episodeSave))
 
 		response := ExecuteRequest(req)
 		parsedBody := ParseBody(response)
@@ -29,8 +29,8 @@ func TestGetSeasons(t *testing.T) {
 		assert.Equal(t, http.StatusOK, response.Code)
 	})
 
-	t.Run("It should return all seasons", func(t *testing.T) {
-		req, _ := http.NewRequest("GET", "/api/season", nil)
+	t.Run("It should return all episodes", func(t *testing.T) {
+		req, _ := http.NewRequest("GET", "/api/episode", nil)
 		response := ExecuteRequest(req)
 		parsedBody := ParseBody(response)
 
@@ -38,8 +38,8 @@ func TestGetSeasons(t *testing.T) {
 		assert.Equal(t, http.StatusOK, response.Code)
 	})
 
-	t.Run("It should return a season", func(t *testing.T) {
-		req, _ := http.NewRequest("GET", "/api/season/1", nil)
+	t.Run("It should return a episode", func(t *testing.T) {
+		req, _ := http.NewRequest("GET", "/api/episode/1", nil)
 		response := ExecuteRequest(req)
 		parsedBody := ParseBody(response)
 
@@ -47,8 +47,8 @@ func TestGetSeasons(t *testing.T) {
 		assert.Equal(t, http.StatusOK, response.Code)
 	})
 
-	t.Run("It shouldn't return a nonexistent season", func(t *testing.T) {
-		req, _ := http.NewRequest("GET", "/api/season/1190347", nil)
+	t.Run("It shouldn't return a nonexistent episode", func(t *testing.T) {
+		req, _ := http.NewRequest("GET", "/api/episode/1190347", nil)
 		response := ExecuteRequest(req)
 		parsedBody := ParseBody(response)
 
@@ -56,23 +56,23 @@ func TestGetSeasons(t *testing.T) {
 		assert.Equal(t, http.StatusNotFound, response.Code)
 	})
 
-	t.Run("It shouldn't return an unparseable season", func(t *testing.T) {
-		req, _ := http.NewRequest("GET", "/api/season/1190347x", nil)
+	t.Run("It shouldn't return an unparseable episode", func(t *testing.T) {
+		req, _ := http.NewRequest("GET", "/api/episode/1190347x", nil)
 		response := ExecuteRequest(req)
 
 		assert.Equal(t, http.StatusNotFound, response.Code)
 	})
 
-	t.Run("It shouldn't create a season because this season already exists", func(t *testing.T) {
-		var season = models.Season{
-			CatalogueID: 1,
+	t.Run("It shouldn't create a episode because this episode already exists", func(t *testing.T) {
+		var episode = models.Episode{
+			SeasonID:    1,
 			Title:       "Redis",
 			Description: "A short desc",
 		}
 
-		seasonSave, _ := json.Marshal(season)
+		episodeSave, _ := json.Marshal(episode)
 
-		req, _ := http.NewRequest("POST", "/api/season", bytes.NewBuffer(seasonSave))
+		req, _ := http.NewRequest("POST", "/api/episode", bytes.NewBuffer(episodeSave))
 
 		response := ExecuteRequest(req)
 		parsedBody := ParseBody(response)
@@ -81,16 +81,16 @@ func TestGetSeasons(t *testing.T) {
 		assert.Equal(t, http.StatusInternalServerError, response.Code)
 	})
 
-	t.Run("It should update a season", func(t *testing.T) {
-		var season = models.Season{
-			CatalogueID: 1,
+	t.Run("It should update a episode", func(t *testing.T) {
+		var episode = models.Episode{
+			SeasonID:    1,
 			Title:       "Redis",
 			Description: "A short desc",
 		}
 
-		seasonSave, _ := json.Marshal(season)
+		episodeSave, _ := json.Marshal(episode)
 
-		req, _ := http.NewRequest("PUT", "/api/season/1", bytes.NewBuffer(seasonSave))
+		req, _ := http.NewRequest("PUT", "/api/episode/1", bytes.NewBuffer(episodeSave))
 
 		response := ExecuteRequest(req)
 		parsedBody := ParseBody(response)
@@ -99,16 +99,16 @@ func TestGetSeasons(t *testing.T) {
 		assert.Equal(t, http.StatusOK, response.Code)
 	})
 
-	t.Run("It shouldn't update a season because this season doesn't exists", func(t *testing.T) {
-		var season = models.Season{
-			CatalogueID: 1,
+	t.Run("It shouldn't update a episode because this episode doesn't exists", func(t *testing.T) {
+		var episode = models.Episode{
+			SeasonID:    1,
 			Title:       "Redis",
 			Description: "A short desc",
 		}
 
-		seasonSave, _ := json.Marshal(season)
+		episodeSave, _ := json.Marshal(episode)
 
-		req, _ := http.NewRequest("PUT", "/api/season/1983204", bytes.NewBuffer(seasonSave))
+		req, _ := http.NewRequest("PUT", "/api/episode/1983204", bytes.NewBuffer(episodeSave))
 
 		response := ExecuteRequest(req)
 		parsedBody := ParseBody(response)
@@ -117,12 +117,12 @@ func TestGetSeasons(t *testing.T) {
 		assert.Equal(t, http.StatusNotFound, response.Code)
 	})
 
-	t.Run("It shouldn't update a season because the body is missing", func(t *testing.T) {
-		var season = models.Season{}
+	t.Run("It shouldn't update a episode because the body is missing", func(t *testing.T) {
+		var episode = models.Episode{}
 
-		seasonSave, _ := json.Marshal(season)
+		episodeSave, _ := json.Marshal(episode)
 
-		req, _ := http.NewRequest("PUT", "/api/season/1", bytes.NewBuffer(seasonSave))
+		req, _ := http.NewRequest("PUT", "/api/episode/1", bytes.NewBuffer(episodeSave))
 
 		response := ExecuteRequest(req)
 		parsedBody := ParseBody(response)
@@ -131,8 +131,8 @@ func TestGetSeasons(t *testing.T) {
 		assert.Equal(t, http.StatusUnprocessableEntity, response.Code)
 	})
 
-	t.Run("It shouldn't delete a season because this doesnt exists", func(t *testing.T) {
-		req, _ := http.NewRequest("DELETE", "/api/season/5951688", nil)
+	t.Run("It shouldn't delete a episode because this doesnt exists", func(t *testing.T) {
+		req, _ := http.NewRequest("DELETE", "/api/episode/5951688", nil)
 		response := ExecuteRequest(req)
 		parsedBody := ParseBody(response)
 
@@ -140,8 +140,8 @@ func TestGetSeasons(t *testing.T) {
 		assert.Equal(t, http.StatusNotFound, response.Code)
 	})
 
-	t.Run("It should delete a season", func(t *testing.T) {
-		req, _ := http.NewRequest("DELETE", "/api/season/1", nil)
+	t.Run("It should delete a episode", func(t *testing.T) {
+		req, _ := http.NewRequest("DELETE", "/api/episode/1", nil)
 		response := ExecuteRequest(req)
 		parsedBody := ParseBody(response)
 
