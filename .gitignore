@@ -1,2 +1,5 @@
 .env
 *.db
+tests/coverage.out
+database/gorm.db
+database

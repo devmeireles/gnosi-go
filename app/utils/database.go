@@ -6,6 +6,7 @@ import (
 	"github.com/devmeireles/gnosi-api/app/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var (
@@ -25,7 +26,9 @@ func InitDatabase(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName string) {
 	// DBURL := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", DbHost, DbPort, DbUser, DbName, DbPassword)
 	// db, err := gorm.Open(postgres.Open(DBURL), &gorm.Config{})
 
-	db, err = gorm.Open(sqlite.Open("./database/gorm.db"), &gorm.Config{})
+	db, err = gorm.Open(sqlite.Open("./database/gorm.db"), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Silent),
+	})
 	if err != nil {
 		fmt.Println("db err: ", err)
 	}

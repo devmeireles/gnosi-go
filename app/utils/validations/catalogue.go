@@ -1,8 +1,6 @@
 package validations
 
 import (
-	"fmt"
-
 	"github.com/devmeireles/gnosi-api/app/models"
 	"github.com/thedevsaddam/govalidator"
 )
@@ -24,7 +22,6 @@ func ValidateCatalogue(catalogue *models.Catalogue) map[string]interface{} {
 	v := govalidator.New(opts)
 	e := v.ValidateStruct()
 	if len(e) > 0 {
-		fmt.Println(e)
 		return map[string]interface{}{"error": e}
 	}
 

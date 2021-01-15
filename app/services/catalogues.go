@@ -29,7 +29,7 @@ func GetCatalogue(id int) (*models.Catalogue, error) {
 	var err error
 	var db = utils.DBConn()
 
-	err = db.Find(&catalogue, id).Error
+	err = db.First(&catalogue, id).Error
 
 	if err != nil {
 		return &models.Catalogue{}, err
@@ -66,7 +66,7 @@ func DeleteCatalogue(id int) (*models.Catalogue, error) {
 	var catalogue models.Catalogue
 	var db = utils.DBConn()
 
-	err = db.Find(&catalogue, id).Error
+	err = db.First(&catalogue, id).Error
 
 	if err != nil {
 		return &models.Catalogue{}, err

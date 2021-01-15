@@ -82,10 +82,24 @@ func UpdateCatalogue(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	_, err = catalogueService.GetCatalogue(id)
+	if err != nil {
+		utils.ResErr(w, err, http.StatusNotFound)
+		return
+	}
+
 	catalogue := models.Catalogue{}
 	err = json.Unmarshal(body, &catalogue)
 
 	catalogue.Slug = utils.Slugfy(catalogue.Title)
+
+	validation := validations.ValidateCatalogue(&catalogue)
+
+	if validation != nil {
+		utils.ResValidation(w, validation)
+		return
+	}
+
 	updatedCatalogue, err := catalogueService.UpdateCatalogue(&catalogue, id)
 
 	if err != nil {
