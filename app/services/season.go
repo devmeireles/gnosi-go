@@ -13,7 +13,7 @@ func AllSeasons() (*[]models.Season, error) {
 	var db = utils.DBConn()
 
 	seasons := []models.Season{}
-	err = db.Model(&models.Season{}).Find(&seasons).Error
+	err = db.Preload("Episodes").Model(&models.Season{}).Find(&seasons).Error
 
 	if err != nil {
 		fmt.Println(err)
@@ -29,7 +29,7 @@ func GetSeason(id int) (*models.Season, error) {
 	var err error
 	var db = utils.DBConn()
 
-	err = db.First(&season, id).Error
+	err = db.Preload("Episodes").First(&season, id).Error
 
 	if err != nil {
 		return nil, err
