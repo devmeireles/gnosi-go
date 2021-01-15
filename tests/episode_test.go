@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetEpisodes(t *testing.T) {
+func TestEpisodeModule(t *testing.T) {
 	t.Run("It should create a episode", func(t *testing.T) {
 		var episode = models.Episode{
 			SeasonID:    1,

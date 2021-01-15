@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetCatalogues(t *testing.T) {
+func TestCatalogueModule(t *testing.T) {
 	t.Run("It should create a catalogue", func(t *testing.T) {
 		var catalogue = models.Catalogue{
 			Title:       "Redis",

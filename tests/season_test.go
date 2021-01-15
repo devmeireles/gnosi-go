@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetSeasons(t *testing.T) {
+func TestSeasonModule(t *testing.T) {
 	t.Run("It should create a season", func(t *testing.T) {
 		var season = models.Season{
 			CatalogueID: 1,

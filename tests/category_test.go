@@ -28,7 +28,7 @@ func ParseBody(content *httptest.ResponseRecorder) models.ResponseMsg {
 
 }
 
-func TestGetCategories(t *testing.T) {
+func TestCategoryModule(t *testing.T) {
 	t.Run("It should create a category", func(t *testing.T) {
 		var category = models.Category{
 			Title:       "Redis",
